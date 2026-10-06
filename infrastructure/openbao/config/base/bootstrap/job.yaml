@@ -23,7 +23,7 @@ spec:
                 exit 0
               fi
               KEY=$(head -c 32 /dev/urandom | base64)
-              kubectl create secret generic "$NAME" --from-literal=key="${KEY}"
+              kubectl create secret generic "$NAME" --from-literal=key="$KEY"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
