@@ -14,6 +14,16 @@ patches:
     target:
       kind: Deployment
       name: "(kustomize-controller|helm-controller|source-controller)"
+  # Fail a Kustomization when postBuild meets a ${VAR} that no variable source
+  # supplies. Without this, Flux replaces the variable with an empty string and
+  # shows no error. See clusters/vanilla/README.md.
+  - patch: |
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --feature-gates=StrictPostBuildSubstitutions=true
+    target:
+      kind: Deployment
+      name: kustomize-controller
 # Multi-Tenancy is disabled for now, as it requires a bit more work to get it functional.
 # patches:
 #   - patch: |
