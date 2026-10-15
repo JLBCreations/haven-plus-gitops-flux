@@ -13,6 +13,18 @@ subjects:
     kind: Group
     name: "k8s-admins"
 ---
+# Cluster-wide READ for the "k8s-developers" Keycloak group.
+#
+# This is deliberately `view` and not `edit`. A ClusterRoleBinding applies in
+# every namespace, and `edit` carries secrets with get,list,watch as well as
+# create,delete,patch,update -- which made every developer able to read the
+# sealed-secrets sealing key (and so decrypt every SealedSecret in the GitOps
+# repository, including historical ones), the flux-system deploy key, the
+# Keycloak admin credentials and the object-storage credentials. The built-in
+# `view` role excludes secrets by design.
+#
+# Write access is granted per namespace instead: each tenant binds `edit` for
+# this group inside its own namespace (see tenants/<tenant>/rbac.yaml).
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
@@ -20,9 +32,8 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: edit
+  name: view
 subjects:
-  # Grant edit access to users in the "k8s-developers" Keycloak group
   - apiGroup: rbac.authorization.k8s.io
     kind: Group
     name: "k8s-developers"

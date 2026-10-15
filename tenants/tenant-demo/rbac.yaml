@@ -40,3 +40,23 @@ subjects:
 - kind: ServiceAccount
   name: tenant-demo
   namespace: tenant-demo
+---
+# Developers get write access inside the tenant namespace only. The cluster-wide
+# binding in infrastructure/pinniped grants read (`view`); this is where a
+# tenant grants the "k8s-developers" Keycloak group the ability to change
+# things, scoped to the namespace it owns.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
+    toolkit.fluxcd.io/tenant: tenant-demo
+  name: tenant-demo-developers
+  namespace: tenant-demo
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: "k8s-developers"
