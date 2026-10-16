@@ -4,3 +4,4 @@ namespace: set-in-overlay
 resources:
   - namespace.yaml
   - helm-release.yaml
+  - haven-compliancy-checker-exception.yaml
