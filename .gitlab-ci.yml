@@ -12,6 +12,17 @@ kustomize:
       kubectl kustomize "$overlay_dir" > /dev/null;
       done
 
+substitutions:
+  image:
+    name: alpine/k8s:1.36.4
+    entrypoint: [ "" ]
+  before_script:
+    # Use the Flux version from mise.toml, so that CI and local checks agree.
+    - FLUX_VERSION=$(sed -n 's/^flux2 = "\(.*\)"$/\1/p' mise.toml)
+    - curl -sSfL "https://github.com/fluxcd/flux2/releases/download/v${FLUX_VERSION}/flux_${FLUX_VERSION}_linux_amd64.tar.gz" | tar xz -C /usr/local/bin flux
+  script:
+    - scripts/check-substitutions.sh vanilla
+
 commitlint:
   image: node:24.20.0
   stage: test

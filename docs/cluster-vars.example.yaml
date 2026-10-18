@@ -1,0 +1,21 @@
+# Template for the cluster-vars ConfigMap.
+#
+# Every Flux Kustomization under clusters/vanilla/infrastructure/ resolves ${...}
+# from this ConfigMap (postBuild.substituteFrom). It is not optional: without
+# it, every Kustomization stops with "ConfigMap not found". That is better than
+# applying a hostname such as `keycloak.` from an unresolved variable.
+#
+# docs/ is in .sourceignore, so Flux never applies this file. Copy it, set your
+# domain, and apply it once before the first reconcile:
+#
+#   sed 's/example.org/your.domain/' docs/cluster-vars.example.yaml | kubectl apply -f -
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-vars
+  namespace: flux-system
+data:
+  # Base domain for every Haven+ endpoint on this cluster. Component hostnames
+  # are prefixed onto it: grafana.<domain>, keycloak.<domain>, and so on.
+  domain: example.org

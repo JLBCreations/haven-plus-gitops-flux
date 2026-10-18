@@ -25,11 +25,11 @@ spec:
   - name: https
     port: 443
     protocol: HTTPS
-    hostname: "*.<domain>"
+    hostname: "*.${domain}"
     tls:
       mode: Terminate
       certificateRefs:
-        - name: "<domain>-wildcard-tls"
+        - name: "${domain}-wildcard-tls"
           kind: Secret
     allowedRoutes:
       kinds:

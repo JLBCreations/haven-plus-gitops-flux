@@ -8,6 +8,6 @@ spec:
       credentialIssuerConfig: |
         impersonationProxy:
           mode: enabled
-          externalEndpoint: "pinniped.example.domain.tld:443"
+          externalEndpoint: "pinniped.${domain}:443"
           service:
             type: ClusterIP

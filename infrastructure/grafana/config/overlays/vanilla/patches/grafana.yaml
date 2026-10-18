@@ -9,14 +9,14 @@ spec:
       name: grafana
       user: grafana
     server:
-      root_url: "https://set-in-overlay"
+      root_url: "https://grafana.${domain}"
     auth.generic_oauth:
-      auth_url:  "https://set-in-overlay/realms/havenplus/protocol/openid-connect/auth"
-      token_url: "https://set-in-overlay/realms/havenplus/protocol/openid-connect/token"
-      api_url:   "https://set-in-overlay/realms/havenplus/protocol/openid-connect/userinfo"
+      auth_url:  "https://keycloak.${domain}/realms/havenplus/protocol/openid-connect/auth"
+      token_url: "https://keycloak.${domain}/realms/havenplus/protocol/openid-connect/token"
+      api_url:   "https://keycloak.${domain}/realms/havenplus/protocol/openid-connect/userinfo"
   httpRoute:
     spec:
-      hostnames: [ set-in-overlay ]
+      hostnames: [ "grafana.${domain}" ]
   deployment:
     spec:
       template:

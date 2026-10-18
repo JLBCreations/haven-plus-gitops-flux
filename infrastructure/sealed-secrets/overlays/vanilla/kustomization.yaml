@@ -5,3 +5,16 @@ resources:
   - ../../base
 patches:
   - path: patches/helm-release.yaml
+  - target:
+      kind: HTTPRoute
+      name: sealed-secrets-public-key
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: sealed-secrets.${domain}
+      - op: replace
+        path: /spec/parentRefs/0
+        value:
+          name: public-gateway
+          namespace: istio-gateway
+          sectionName: https

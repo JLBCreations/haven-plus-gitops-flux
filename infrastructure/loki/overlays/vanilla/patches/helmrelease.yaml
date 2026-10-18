@@ -2,6 +2,10 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: loki
+  annotations:
+    # The S3 credentials below are expanded at runtime from the s3-credentials
+    # Secret, not by Flux. This stops Flux postBuild substitution on this object.
+    kustomize.toolkit.fluxcd.io/substitute: disabled
 spec:
   values:
     global:

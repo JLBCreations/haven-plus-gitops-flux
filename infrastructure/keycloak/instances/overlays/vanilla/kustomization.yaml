@@ -6,16 +6,30 @@ resources:
 #  - sealed.yaml
 patches:
   - target:
+      kind: Keycloak
+      name: keycloak
+    patch: |
+      - op: replace
+        path: /spec/hostname/hostname
+        value: keycloak.${domain}
+  - target:
+      kind: HTTPRoute
+      name: keycloak
+    patch: |
+      - op: replace
+        path: /spec/hostnames/0
+        value: keycloak.${domain}
+  - target:
       kind: KeycloakRealmImport
       name: havenplus-realm-import
     patch: |
       - op: replace
         path: /spec/realm/clients/1/redirectUris/0
-        value: "https://set-in-overlay/login/generic_oauth"
+        value: "https://grafana.${domain}/login/generic_oauth"
   - target:
       kind: KeycloakRealmImport
       name: havenplus-realm-import
     patch: |
       - op: replace
         path: /spec/realm/clients/2/redirectUris/0
-        value: "https://set-in-overlay/oauth2/callback"
+        value: "https://opencost.${domain}/oauth2/callback"

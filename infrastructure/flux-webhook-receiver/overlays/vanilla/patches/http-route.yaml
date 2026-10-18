@@ -8,4 +8,4 @@ spec:
     namespace: istio-gateway
     sectionName: https
   hostnames:
-  - "flux.<domain>"
+  - "flux.${domain}"

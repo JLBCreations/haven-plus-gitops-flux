@@ -3,7 +3,7 @@ kind: JWTAuthenticator
 metadata:
   name: jwt-authenticator
 spec:
-  issuer: "https://keycloak.<domain>/realms/havenplus"
+  issuer: "https://keycloak.${domain}/realms/havenplus"
   audience: "pinniped-cli"
   claims:
     username: email

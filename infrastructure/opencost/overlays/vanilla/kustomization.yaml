@@ -8,10 +8,10 @@ configMapGenerator:
     options:
       disableNameSuffixHash: true
     literals:
-      - OAUTH2_PROXY_OIDC_ISSUER_URL=https://set-in-overlay/realms/havenplus
-      - OAUTH2_PROXY_REDIRECT_URL=https://set-in-overlay/oauth2/callback
-      - OAUTH2_PROXY_COOKIE_DOMAINS=set-in-overlay
-      - OAUTH2_PROXY_WHITELIST_DOMAINS=set-in-overlay
+      - OAUTH2_PROXY_OIDC_ISSUER_URL=https://keycloak.${domain}/realms/havenplus
+      - OAUTH2_PROXY_REDIRECT_URL=https://opencost.${domain}/oauth2/callback
+      - OAUTH2_PROXY_COOKIE_DOMAINS=opencost.${domain}
+      - OAUTH2_PROXY_WHITELIST_DOMAINS=opencost.${domain}
       - OAUTH2_PROXY_COOKIE_SECURE=true
 patches:
   - target:
@@ -20,4 +20,4 @@ patches:
     patch: |
       - op: replace
         path: /spec/hostnames/0
-        value: set-in-overlay
+        value: opencost.${domain}

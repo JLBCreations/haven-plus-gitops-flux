@@ -26,3 +26,23 @@ resources:
   - tempo.yaml
   - trivy-operator.yaml
   - velero.yaml
+
+# Every component Kustomization substitutes ${...} from the cluster-vars
+# ConfigMap in flux-system, so the domain lives outside git. Patched here, so a
+# new component gets it by being listed above. See docs/cluster-vars.example.yaml.
+#
+# Anything a container expands at runtime must not be substituted by Flux:
+# escape it as $${LIKE_THIS}, or mark the object with
+# kustomize.toolkit.fluxcd.io/substitute: disabled (see loki and mimir).
+# scripts/check-substitutions.sh checks this in CI.
+patches:
+  - target:
+      group: kustomize.toolkit.fluxcd.io
+      kind: Kustomization
+    patch: |
+      - op: add
+        path: /spec/postBuild
+        value:
+          substituteFrom:
+            - kind: ConfigMap
+              name: cluster-vars

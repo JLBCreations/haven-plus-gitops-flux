@@ -8,7 +8,7 @@ spec:
       namespace: istio-gateway
       sectionName: tls-passthrough
   hostnames:
-    - "pinniped.<domain>"
+    - "pinniped.${domain}"
   rules:
     - backendRefs:
         - name: pinniped-concierge-impersonation-proxy-cluster-ip
