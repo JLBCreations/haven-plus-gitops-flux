@@ -5,7 +5,7 @@ namespace: set-in-overlay
 resources:
   - ./network-policies
   - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.5.1/standard-install.yaml
-  - https://download.elastic.co/downloads/eck/3.4.0/crds.yaml
+  - https://download.elastic.co/downloads/eck/3.5.0/crds.yaml
   # Prometheus-Operator CRDs
   - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.81.0/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
   - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.81.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml

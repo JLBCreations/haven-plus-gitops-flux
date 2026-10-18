@@ -24,6 +24,11 @@
       "matchPackageNames": ["keycloak-operator"],
       "matchUpdateTypes": ["patch"],
       "enabled": true
+    },
+    {
+      "description": "The eck-operator chart runs with installCRDs: false, because cluster-resources installs the ECK CRDs from a URL. Group the chart and the CRD URL, so that both get the same version in one MR.",
+      "matchPackageNames": ["eck-operator"],
+      "groupName": "eck-operator"
     }
   ],
   "flux": {
@@ -61,6 +66,19 @@
       "depNameTemplate": "{{{registry}}}/{{{repository}}}",
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker"
+    },
+    {
+      "customType": "regex",
+      "description": "Updates the ECK CRD URL in cluster-resources to the eck-operator chart version",
+      "managerFilePatterns": [
+        "/^infrastructure/cluster-resources/base/kustomization\\.yaml$/"
+      ],
+      "matchStrings": [
+        "https://download\\.elastic\\.co/downloads/eck/(?<currentValue>[0-9.]+)/crds\\.yaml"
+      ],
+      "depNameTemplate": "eck-operator",
+      "datasourceTemplate": "helm",
+      "registryUrlTemplate": "https://helm.elastic.co"
     }
   ]
 }
