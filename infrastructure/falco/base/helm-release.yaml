@@ -33,7 +33,7 @@ spec:
       config:
         customfields: "from:falcosidekick"
         loki:
-          hostport: "http://loki.loki.svc.cluster.local:3100"
+          hostport: "http://loki-gateway.loki.svc.cluster.local:80"
           endpoint: "/loki/api/v1/push" 
           tenant: "admin"
     servicemonitor:
