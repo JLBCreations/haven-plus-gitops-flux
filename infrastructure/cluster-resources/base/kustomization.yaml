@@ -10,3 +10,18 @@ resources:
   - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.81.0/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
   - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.81.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
   - https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.81.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+
+# Upstream CRDs can contain ${...} in their descriptions, for example the ECK
+# StackConfigPolicy. Flux postBuild must not touch them: it fails on names such
+# as ${foo.bar}, and in strict mode on any unknown ${VAR}. A CRD never needs a
+# value from cluster-vars.
+patches:
+  - target:
+      kind: CustomResourceDefinition
+    patch: |
+      apiVersion: apiextensions.k8s.io/v1
+      kind: CustomResourceDefinition
+      metadata:
+        name: any
+        annotations:
+          kustomize.toolkit.fluxcd.io/substitute: disabled
