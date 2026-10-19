@@ -2,6 +2,10 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: openbao-auth-config
+  annotations:
+    # The pod template of a Job is immutable, so Flux recreates the Job when
+    # the template changes (e.g. an image update). The script is idempotent.
+    kustomize.toolkit.fluxcd.io/force: enabled
 spec:
   template:
     spec:
@@ -16,7 +20,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: auth-config
-          image: quay.io/openbao/openbao:2.6.1
+          image: quay.io/openbao/openbao:2.7.1
           command: ["/bin/sh", "-c"]
           args:
             - |
