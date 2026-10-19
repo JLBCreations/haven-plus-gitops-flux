@@ -24,7 +24,7 @@ substitutions:
     - scripts/check-substitutions.sh vanilla
 
 commitlint:
-  image: node:24.20.0
+  image: node:24.22.0
   stage: test
   variables:
     GIT_DEPTH: '0'
