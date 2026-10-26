@@ -62,10 +62,10 @@ spec:
       runAsUser: 1001
       seccompProfile:
         type: RuntimeDefault
+    # The chart uses the kubectl image only for the cleanUpCRDs and namespace.labels hooks,
+    # which are disabled. These hooks run /bin/kubectl, so keep the chart default image
+    # (alpine/k8s has kubectl in /usr/bin).
     kubectl:
-      image:
-        repository: bitnamilegacy/kubectl
-        tag: 1.33.4
       containerSecurityContext:
         allowPrivilegeEscalation: false
         capabilities:

@@ -1,6 +1,6 @@
 docker.elastic.co/eck/eck-operator:3.5.0
+docker.io/alpine/k8s:1.37.1
 docker.io/bitnami/sealed-secrets-controller:0.38.4
-docker.io/bitnamilegacy/kubectl:1.33.4
 docker.io/dxflrs/amd64_garage:v2.3.0
 docker.io/falcosecurity/falco-driver-loader:0.41.0
 docker.io/falcosecurity/falco:0.41.0

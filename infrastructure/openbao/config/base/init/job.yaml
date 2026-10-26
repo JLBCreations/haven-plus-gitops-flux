@@ -57,7 +57,7 @@ spec:
               drop: ["ALL"]
       containers:
         - name: store-credentials
-          image: bitnamilegacy/kubectl:1.33.4
+          image: alpine/k8s:1.37.1
           command: ["/bin/sh", "-c"]
           args:
             - |

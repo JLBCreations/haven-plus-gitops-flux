@@ -41,11 +41,13 @@ spec:
       serviceAccountName: garage-postconfig
       securityContext:
         runAsNonRoot: true
+        # alpine/k8s runs as root by default
+        runAsUser: 1001
         seccompProfile:
           type: RuntimeDefault
       containers:
       - name: postconfig
-        image: bitnamilegacy/kubectl:1.33.4
+        image: alpine/k8s:1.37.1
         command: ["/bin/sh", "-c"]
         args:
           - |
