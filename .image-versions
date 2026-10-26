@@ -15,6 +15,10 @@ docker.io/grafana/mimir:2.17.11
 docker.io/grafana/rollout-operator:v0.41.1
 docker.io/grafana/tempo:2.10.10
 docker.io/hashicorp/vault-k8s:1.7.6
+docker.io/istio/install-cni:1.31.3-distroless
+docker.io/istio/pilot:1.31.3-distroless
+docker.io/istio/proxyv2:1.31.3-distroless
+docker.io/istio/ztunnel:1.31.3
 docker.io/kiwigrid/k8s-sidecar:2.14.1
 docker.io/library/busybox:stable
 docker.io/nginxinc/nginx-unprivileged:1.31-alpine
@@ -54,7 +58,3 @@ reg.kyverno.io/kyverno/kyverno:v1.19.2
 reg.kyverno.io/kyverno/kyvernopre:v1.19.2
 reg.kyverno.io/kyverno/reports-controller:v1.19.2
 registry.gitlab.com/commonground/haven/havenplus/example-apps/otel-demo-golang:1.1.0
-registry.istio.io/release/install-cni:1.30.7-distroless
-registry.istio.io/release/pilot:1.30.7-distroless
-registry.istio.io/release/proxyv2:1.30.7-distroless
-registry.istio.io/release/ztunnel:1.30.7
