@@ -16,6 +16,7 @@ spec:
   dependsOn:
     - name: cluster-resources
     - name: kyverno-policies
+    - name: sealed-secrets
 
 ---
 # CONFIG
