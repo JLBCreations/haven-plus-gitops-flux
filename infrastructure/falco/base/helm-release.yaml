@@ -18,15 +18,13 @@ spec:
   chart:
     spec:
       chart: falco
-      version: "5.0.3" # see https://artifacthub.io/packages/helm/falcosecurity/falco
+      version: "9.2.0" # see https://artifacthub.io/packages/helm/falcosecurity/falco
       sourceRef:
         kind: HelmRepository
         name: falco
   values:
-    json_output: true
-    http_output:
-      enabled: true
-      url: "http://falco-falcosidekick.falco.svc.cluster.local:2801"
+    # With falcosidekick enabled, the chart sets json_output and points http_output at
+    # falcosidekick itself.
     falcosidekick:
       enabled: true
       config:
@@ -35,7 +33,9 @@ spec:
           hostport: "http://loki-gateway.loki.svc.cluster.local:80"
           endpoint: "/loki/api/v1/push" 
           tenant: "admin"
-    servicemonitor:
+    metrics:
+      enabled: true
+    serviceMonitor:
       create: true
     collectors:
       kubernetes:
