@@ -33,3 +33,12 @@ spec:
         # enforce resource filters in background scans to avoid flooding event logs
         # with entries for namespaces already excluded in the admission flow.
         skipResourceFilters: false 
+    reportsController:
+      # The chart default limit (128Mi) is too low for a full Haven+ stack: the
+      # controller sits at its limit, the kernel keeps evicting and re-reading its
+      # pages (high system CPU) and it restarts after losing its leader lease.
+      resources:
+        requests:
+          memory: 128Mi
+        limits:
+          memory: 512Mi
