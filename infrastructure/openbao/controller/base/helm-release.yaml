@@ -24,6 +24,11 @@ spec:
       interval: 12h
   values:
     server:
+      # The chart default is OnDelete: an update changes the StatefulSet, but each pod keeps
+      # the old image until someone deletes it. RollingUpdate replaces one pod at a time and
+      # waits until it is Ready. The static seal unseals each new pod, and the Raft cluster
+      # keeps its quorum because only one of the three members is down at a time.
+      updateStrategyType: RollingUpdate
       statefulSet:
         securityContext:
           container:
