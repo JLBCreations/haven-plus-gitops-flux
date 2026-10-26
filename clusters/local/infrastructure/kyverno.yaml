@@ -54,3 +54,5 @@ spec:
   wait: true
   dependsOn:
     - name: kyverno-policies
+    # The chart creates GrafanaDashboard objects; that CRD comes with the Grafana operator.
+    - name: grafana-controller
