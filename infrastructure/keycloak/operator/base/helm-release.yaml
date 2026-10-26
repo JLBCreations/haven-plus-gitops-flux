@@ -49,4 +49,17 @@ spec:
             patch: |
               - op: replace
                 path: /subjects/0/namespace
-                value: keycloak-operator   
+                value: keycloak-operator
+          # The operator has no leader election. With the default RollingUpdate strategy the
+          # old and the new operator run side by side during an upgrade, and both reconcile
+          # the Keycloak CR with their own server image. Recreate stops the old operator first.
+          - target:
+              group: apps
+              version: v1
+              kind: Deployment
+              name: keycloak-operator
+            patch: |
+              - op: add
+                path: /spec/strategy
+                value:
+                  type: Recreate
