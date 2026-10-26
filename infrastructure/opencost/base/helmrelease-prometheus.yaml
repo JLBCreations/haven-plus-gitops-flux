@@ -35,6 +35,13 @@ spec:
     # KSM service so the default kubernetes-service-endpoints job discovers it.
     kube-state-metrics:
       enabled: true
+    # The scrape target of this job is the endpoint IP of the kubernetes Service. On
+    # Gardener that is the apiserver-proxy IP, which is not in the API server certificate,
+    # so the TLS check fails. Check the certificate against the Service name instead.
+    scrapeConfigs:
+      kubernetes-api-servers:
+        tls_config:
+          server_name: kubernetes.default.svc
     server:
       retention: "7d"
       persistentVolume:
