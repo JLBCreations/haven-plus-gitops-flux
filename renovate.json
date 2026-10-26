@@ -29,6 +29,12 @@
       "description": "The eck-operator chart runs with installCRDs: false, because cluster-resources installs the ECK CRDs from a URL. Group the chart and the CRD URL, so that both get the same version in one MR.",
       "matchPackageNames": ["eck-operator"],
       "groupName": "eck-operator"
+    },
+    {
+      "description": ".image-versions only lists the images that task run-local pre-loads into Kind. Update all of them in one MR, patch updates included, instead of one MR for each image.",
+      "matchFileNames": [".image-versions"],
+      "groupName": "local Kind images",
+      "enabled": true
     }
   ],
   "flux": {
@@ -49,7 +55,7 @@
         "/\\.image-versions$/"
       ],
       "matchStrings": [
-        "(?<depName>.*?):(?<currentValue>.*?)$"
+        "(?<depName>[^\\s:]+):(?<currentValue>[^\\s]+)"
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker"
