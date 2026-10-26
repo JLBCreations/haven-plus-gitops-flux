@@ -85,6 +85,31 @@
       "depNameTemplate": "eck-operator",
       "datasourceTemplate": "helm",
       "registryUrlTemplate": "https://helm.elastic.co"
+    },
+    {
+      "customType": "regex",
+      "description": "Updates the remote resources of a Kustomization that point at a GitHub release asset or a tagged raw file, e.g. the Gateway API and prometheus-operator CRDs and the tempo-operator manifest",
+      "managerFilePatterns": [
+        "/(^|/)kustomization\\.yaml$/"
+      ],
+      "matchStrings": [
+        "https://github\\.com/(?<depName>[^/\\s]+/[^/\\s]+)/releases/download/(?<currentValue>v[0-9][^/\\s]*)/",
+        "https://raw\\.githubusercontent\\.com/(?<depName>[^/\\s]+/[^/\\s]+)/(?<currentValue>v[0-9][^/\\s]*)/"
+      ],
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "customType": "regex",
+      "description": "Updates the kindest/node version that task run-local uses for the Kind cluster",
+      "managerFilePatterns": [
+        "/^Taskfile\\.yaml$/"
+      ],
+      "matchStrings": [
+        "KIND_VERSION: (?<currentValue>[0-9][^\\s]*)"
+      ],
+      "depNameTemplate": "kindest/node",
+      "datasourceTemplate": "docker",
+      "extractVersionTemplate": "^v(?<version>.+)$"
     }
   ]
 }
