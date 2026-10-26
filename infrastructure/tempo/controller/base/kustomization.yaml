@@ -2,7 +2,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - https://github.com/grafana/tempo-operator/releases/download/v0.17.1/tempo-operator.yaml
+  - https://github.com/grafana/tempo-operator/releases/download/v0.23.1/tempo-operator.yaml
 patches:
 - target:
     kind: Namespace
@@ -24,3 +24,15 @@ patches:
         capabilities:
           drop:
           - ALL
+- target:
+    kind: Deployment
+    name: tempo-operator-controller
+  # Since tempo-operator 0.20 the operator puts a deny-all NetworkPolicy in its
+  # own namespace. That policy also blocks DNS, and on Gardener clusters the
+  # operator must resolve the API server hostname, so it cannot start.
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: FEATURE_GATES
+        value: -networkPolicies

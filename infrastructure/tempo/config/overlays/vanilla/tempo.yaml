@@ -3,6 +3,10 @@ kind: TempoStack
 metadata:
   name: ts
 spec:
+  # Since tempo-operator 0.20 the operator creates NetworkPolicies for the Tempo
+  # components by default. They are switched off until we test them with Istio.
+  networkPolicy:
+    enabled: false
   retention:
     global:
       traces: 72h
