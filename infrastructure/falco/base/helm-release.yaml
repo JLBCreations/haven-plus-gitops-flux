@@ -22,7 +22,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: falco
-        namespace: falco
   values:
     json_output: true
     http_output:

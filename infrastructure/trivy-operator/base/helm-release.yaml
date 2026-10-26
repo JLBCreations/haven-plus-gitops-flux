@@ -22,7 +22,6 @@ spec:
       sourceRef:
         kind: HelmRepository
         name: trivy-operator
-        namespace: trivy-system
   values:
     serviceMonitor:
       enabled: true
