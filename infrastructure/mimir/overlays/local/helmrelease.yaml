@@ -44,6 +44,10 @@ spec:
             bucket_name: mimir-ruler
         limits:
           compactor_blocks_retention_period: 3d
+        # monolithic mode runs without a query-scheduler, so the frontend's own queue applies (default 100).
+        # Every query is split into 16 shards, so one dashboard refresh easily exceeds 100 and gets HTTP 429.
+        frontend:
+          max_outstanding_per_tenant: 800
 
     monolithic:
       replicas: 2 # we need at least two live replicas in order for Alloy to send data
