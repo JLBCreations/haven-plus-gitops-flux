@@ -1,0 +1,28 @@
+# The Trivy operator runs a node-collector Job on every node to check the node
+# configuration (infra assessment). It needs hostPID and read-only hostPath
+# mounts. This exception lets only that Job and its pods past the two Kyverno
+# policies they fail, and only in the trivy-system namespace.
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: trivy-node-collector
+spec:
+  exceptions:
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+    - policyName: restrict-volume-types
+      ruleNames:
+        - restricted-volumes
+        - autogen-restricted-volumes
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - Job
+          namespaces:
+            - trivy-system
+          names:
+            - node-collector-*

@@ -5,3 +5,4 @@ resources:
   - namespace.yaml
   - helm-release.yaml
   - haven-compliancy-checker-exception.yaml
+  - trivy-node-collector-exception.yaml
