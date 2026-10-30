@@ -33,3 +33,12 @@ spec:
       scanJobPodTemplateContainerSecurityContext:
         seccompProfile:
           type: RuntimeDefault
+    trivy:
+      # Scan jobs ran out of memory at the chart default limit of 500M (OOMKilled).
+      resources:
+        limits:
+          memory: 1Gi
+      # Report only vulnerabilities that have a fix. The falco-driver-loader image
+      # alone has about 4200 vulnerabilities; the VulnerabilityReport of the Falco
+      # DaemonSet exceeded the etcd object limit (1.5 MiB) and could never be stored.
+      ignoreUnfixed: true
