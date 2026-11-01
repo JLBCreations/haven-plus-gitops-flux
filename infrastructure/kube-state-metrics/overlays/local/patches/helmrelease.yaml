@@ -1,0 +1,12 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: kube-state-metrics
+spec:
+  values:
+    # Alloy already scrapes kube-state-metrics directly with honor_labels (see alloy metrics.alloy).
+    # The ServiceMonitor scraped it a second time without honor_labels, which overwrote the namespace
+    # and pod labels with those of kube-state-metrics itself (real ones in exported_namespace/exported_pod).
+    prometheus:
+      monitor:
+        enabled: false

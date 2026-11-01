@@ -3,3 +3,5 @@ kind: Kustomization
 namespace: kube-state-metrics
 resources:
   - ../../base
+patches:
+  - path: patches/helmrelease.yaml
