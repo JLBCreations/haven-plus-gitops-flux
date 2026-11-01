@@ -1,0 +1,47 @@
+# node-exporter reports the hardware and OS of each node (CPU, memory, disk, network): the
+# node_* metrics that the Kubernetes Views dashboards (Global, Nodes) need. Alloy scrapes it
+# through the ServiceMonitor below. It needs the host network and PID namespaces and read-only
+# host mounts; the PolicyException node-exporter in kyverno-policies allows exactly that.
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: node-exporter
+spec:
+  interval: 30m
+  driftDetection:
+    mode: enabled
+  install:
+    strategy: 
+      name: RetryOnFailure
+      retryInterval: 2m
+  upgrade:
+    strategy: 
+      name: RetryOnFailure
+      retryInterval: 2m
+  chart:
+    spec:
+      chart: prometheus-node-exporter
+      version: "4.60.1"
+      sourceRef:
+        kind: HelmRepository
+        name: node-exporter
+      interval: 12h
+  values:
+    fullnameOverride: node-exporter
+    prometheus:
+      monitor:
+        enabled: true
+    securityContext:
+      fsGroup: 65534
+      runAsGroup: 65534
+      runAsNonRoot: true
+      runAsUser: 65534
+      seccompProfile:
+        type: RuntimeDefault
+    containerSecurityContext:
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: ["ALL"]
+      seccompProfile:
+        type: RuntimeDefault

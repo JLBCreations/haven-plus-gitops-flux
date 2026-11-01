@@ -1,0 +1,5 @@
+# No ambient label: node-exporter runs in the host network namespace, outside the mesh.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: node-exporter

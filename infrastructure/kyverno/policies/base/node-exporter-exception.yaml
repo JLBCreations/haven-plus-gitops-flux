@@ -1,0 +1,32 @@
+# node-exporter measures the node itself, so it shares the host network and PID namespaces
+# and mounts /, /proc and /sys of the node read-only. This exception lets only the
+# node-exporter DaemonSet and its pods past the three Kyverno policies they fail, and only
+# in the node-exporter namespace.
+apiVersion: kyverno.io/v2
+kind: PolicyException
+metadata:
+  name: node-exporter
+spec:
+  exceptions:
+    - policyName: disallow-host-namespaces
+      ruleNames:
+        - host-namespaces
+        - autogen-host-namespaces
+    - policyName: disallow-host-path
+      ruleNames:
+        - host-path
+        - autogen-host-path
+    - policyName: restrict-volume-types
+      ruleNames:
+        - restricted-volumes
+        - autogen-restricted-volumes
+  match:
+    any:
+      - resources:
+          kinds:
+            - Pod
+            - DaemonSet
+          namespaces:
+            - node-exporter
+          names:
+            - node-exporter*

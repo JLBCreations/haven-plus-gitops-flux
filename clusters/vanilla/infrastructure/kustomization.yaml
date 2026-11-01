@@ -19,6 +19,7 @@ resources:
   - loki.yaml
   - mimir.yaml
   - nfs-server-provisioner.yaml
+  - node-exporter.yaml
   - openbao.yaml
   - opencost.yaml
   - pinniped.yaml
