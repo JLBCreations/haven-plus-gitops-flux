@@ -30,28 +30,12 @@ prometheus.scrape "kube_state_metrics" {
 
 // Kubelet metrics & CAdvisor
 // The Kubelet gathers metrics statistics at the node, volume, pod and container level.
-// This information is emitted by the K8S Summary API, which can be reached through a 
-// proxied request on the K8S API server. The configuration below utilises this to
-// retrieve Kubelet and CAdvisor telemetry data points.
+// Alloy scrapes the kubelet directly on its HTTPS port (the node address from discovery, 10250).
+// That needs only the nodes/metrics permission, which the Alloy chart grants. Going through the
+// API server proxy (/api/v1/nodes/<node>/proxy/...) needs nodes/proxy, which the chart does not
+// grant (HTTP 403) and which is best avoided: it also gives access to the rest of the kubelet API.
 discovery.relabel "kubelet" {
     targets = discovery.kubernetes.k8s_nodes.targets
-
-    // Replace the address with the HTTPS 443 endpoint, as by default
-    // the '__address__' label stores the HTTP endpoint.
-    rule {
-        replacement  = "kubernetes.default.svc:443"
-        target_label = "__address__"
-    }
-
-    // Set the '__metrics_path__' label used by the Prometheus scrape action
-    // later in the pipeline. This interpolates the node name in the proxy request
-    // for the API server, which will in turn query the Summary API.
-    rule {
-        regex         = "(.+)"
-        source_labels = ["__meta_kubernetes_node_name"]
-        replacement   = "/api/v1/nodes/$1/proxy/metrics"
-        target_label  = "__metrics_path__"
-    }
 }
 
 prometheus.scrape "kubelet" {
@@ -60,10 +44,8 @@ prometheus.scrape "kubelet" {
     scheme   = "https"
 
     tls_config {
-        server_name          = "kubernetes"
-        // Use the certificate bundle placed into the filesystem tree of every container in K8S.
-        ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-        insecure_skip_verify = false
+        // The kubelet serving certificate on kind is self-signed, so it cannot be verified.
+        insecure_skip_verify = true
     }
 
     // Use the default credential that every Pod has through its associated Service Account.
@@ -74,21 +56,9 @@ prometheus.scrape "kubelet" {
 discovery.relabel "cadvisor" {
     targets = discovery.kubernetes.k8s_nodes.targets
 
-    // Replace the address with the HTTPS 443 endpoint, as by default
-    // the '__address__' label stores the HTTP endpoint.
     rule {
-        replacement  = "kubernetes.default.svc:443"
-        target_label = "__address__"
-    }
-
-    // Set the '__metrics_path__' label used by the Prometheus scrape action
-    // later in the pipeline. This interpolates the node name in the proxy request
-    // for the API server, which will in turn query the Summary API.
-    rule {
-        regex         = "(.+)"
-        source_labels = ["__meta_kubernetes_node_name"]
-        replacement   = "/api/v1/nodes/$1/proxy/metrics/cadvisor"
-        target_label  = "__metrics_path__"
+        replacement  = "/metrics/cadvisor"
+        target_label = "__metrics_path__"
     }
 }
 
@@ -98,10 +68,8 @@ prometheus.scrape "cadvisor" {
     scheme   = "https"
 
     tls_config {
-        server_name          = "kubernetes"
-        // Use the certificate bundle placed into the filesystem tree of every container in K8S.
-        ca_file              = "/var/run/secrets/kubernetes.io/serviceaccount/ca.crt"
-        insecure_skip_verify = false
+        // The kubelet serving certificate on kind is self-signed, so it cannot be verified.
+        insecure_skip_verify = true
     }
 
     // Use the default credential that every Pod has through its associated Service Account.
