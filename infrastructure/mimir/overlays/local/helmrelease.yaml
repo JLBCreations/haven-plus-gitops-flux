@@ -48,9 +48,21 @@ spec:
         # Every query is split into 16 shards, so one dashboard refresh easily exceeds 100 and gets HTTP 429.
         frontend:
           max_outstanding_per_tenant: 800
+        # A single replica locally, so no copies to keep: replication factor 1 for every ring.
+        ingester:
+          ring:
+            replication_factor: 1
+        store_gateway:
+          sharding_ring:
+            replication_factor: 1
+        alertmanager:
+          sharding_ring:
+            replication_factor: 1
 
     monolithic:
-      replicas: 2 # we need at least two live replicas in order for Alloy to send data
+      # One replica is enough on a single-node local cluster. With one replica the replication factor
+      # must be 1 too (see structuredConfig): the default of 3 needs two live replicas for a write.
+      replicas: 1
       resources:
         # set resource requests so that mimir can run on local Kind envs
         requests:
