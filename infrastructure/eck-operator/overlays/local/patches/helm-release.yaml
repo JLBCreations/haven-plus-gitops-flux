@@ -4,6 +4,8 @@ metadata:
   name: eck-operator
 spec:
   values:
+    # The base runs two operators (one active, one standby); on a single-node local cluster one is enough.
+    replicaCount: 1
     resources:
       # set resource requests so that eck-operator can run on local Kind envs
       requests:
