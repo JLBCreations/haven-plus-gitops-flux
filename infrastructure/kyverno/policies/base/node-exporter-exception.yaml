@@ -1,7 +1,8 @@
 # node-exporter measures the node itself, so it shares the host network and PID namespaces
-# and mounts /, /proc and /sys of the node read-only. This exception lets only the
-# node-exporter DaemonSet and its pods past the three Kyverno policies they fail, and only
-# in the node-exporter namespace.
+# and mounts /, /proc and /sys of the node read-only. In the host network, Kubernetes sets
+# hostPort to the container port (9100) on the pod, so disallow-host-ports fails as well.
+# This exception lets only the node-exporter DaemonSet and its pods past the four Kyverno
+# policies they fail, and only in the node-exporter namespace.
 apiVersion: kyverno.io/v2
 kind: PolicyException
 metadata:
@@ -16,6 +17,10 @@ spec:
       ruleNames:
         - host-path
         - autogen-host-path
+    - policyName: disallow-host-ports
+      ruleNames:
+        - host-ports-none
+        - autogen-host-ports-none
     - policyName: restrict-volume-types
       ruleNames:
         - restricted-volumes
