@@ -23,18 +23,9 @@ prometheus.scrape "kube_state_metrics" {
     scheme          = "http"
     honor_labels    = true
     scrape_interval = "30s"
-    forward_to      = [prometheus.relabel.namespace_filter.receiver]
-}
-
-prometheus.relabel "namespace_filter" {
-    forward_to        = [prometheus.remote_write.mimir.receiver]
-
-    // Drop any tenant records as these are already fetched through Tenant alloy configs
-    rule {
-        action        = "drop"
-        regex         = "^tenant-.*"
-        source_labels = ["namespace"]
-    }
+    // The local setup has no separate Alloy per tenant, so tenant namespaces (tenant-*) are kept here.
+    // Dropping them meant no kube-state-metrics data at all for tenant pods.
+    forward_to      = [prometheus.remote_write.mimir.receiver]
 }
 
 // Kubelet metrics & CAdvisor
