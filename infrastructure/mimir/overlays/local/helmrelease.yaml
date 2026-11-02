@@ -36,6 +36,12 @@ spec:
         blocks_storage:
           s3:
             bucket_name: mimir-blocks
+          # Locally the Docker VM pauses while the Mac sleeps. The compactor then stops updating the
+          # bucket index, and after 1 hour (the default) every query older than ~12h fails with
+          # "the bucket index is too old". 12h rides out a night; new blocks just show up a bit later.
+          bucket_store:
+            bucket_index:
+              max_stale_period: 12h
         alertmanager_storage:
           s3:
             bucket_name: mimir-alertmanager
