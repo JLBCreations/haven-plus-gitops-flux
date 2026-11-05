@@ -5,6 +5,12 @@ metadata:
 spec:
   values:
     deploymentMode: SingleBinary
+    # No Loki canary locally: a test pod that only writes and reads log lines to check Loki.
+    # The chart's helm test needs the canary, so the test is switched off too.
+    lokiCanary:
+      enabled: false
+    test:
+      enabled: false
     singleBinary:
       replicas: 1
     loki:
