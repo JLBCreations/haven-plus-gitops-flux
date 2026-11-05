@@ -1,0 +1,10 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: trivy-operator
+spec:
+  values:
+    operator:
+      # One scan job at a time locally (chart default 10). After a restart all images are scanned
+      # again, and ten scans at once fill the single node's CPU for minutes.
+      scanJobsConcurrentLimit: 1
