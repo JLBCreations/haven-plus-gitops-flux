@@ -1,0 +1,11 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: headlamp
+spec:
+  values:
+    config:
+      # Locally Headlamp is only reachable through a port-forward on 127.0.0.1, so log every user in as the
+      # pod's own service account instead of asking for a token (which expires after about an hour).
+      # Do not do this on a shared cluster: everyone who reaches Headlamp gets the rights of that account.
+      unsafeUseServiceAccountToken: true
